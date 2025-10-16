@@ -1,0 +1,29 @@
+{% extends "mgmbase.html" %}
+
+{% block style %}
+{% endblock %}
+
+{% block mgmContent %}
+
+<div class="col-md-12">
+    <div class="h-100 p-5 text-bg-dark rounded-3">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2> Box cameras</h2>
+                <hr>
+                <h3>Deterrence in any environment</h3>
+                <h5>Box cameras from Axis send a powerful message of deterrence to potential offenders: 
+                    Think twice. We're watching. That's because they provide a clearly visible, fixed 
+                    angle of view, making it easy to see exactly where they're pointing and allowing 
+                    you to record a precisely defined area. Our fixed box portfolio includes CS-mount 
+                    cameras with interchangeable lenses.
+                </h5>
+            </div>
+            <div class="col-sm-6">
+                <img src="{{url_for('static', filename='images/box_cam.png')}}" class="img-thumbnail">
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

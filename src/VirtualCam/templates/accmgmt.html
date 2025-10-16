@@ -1,0 +1,119 @@
+<!-- user page templage base.html -->
+{% extends 'mgmbase.html'%}
+
+{% block mgmContent %}
+
+{% set selectuser='' %}
+
+<div class="offcanvas offcanvas-start text-bg-dark" id="demo">
+
+    <div class="offcanvas-header">
+      <h3 class="offcanvas-title">Create A New User on IoT</h3>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body">
+        <form method="POST" action="/addnewuser">
+            <h5> Input new user configuration </h5>
+            <p> </p>
+            <label for="email">User Type : </label>
+            <p> </p>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" id="radio1" name="optradio" value="option1">
+                <label class="form-check-label" for="radio1">Admin</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" id="radio2" name="optradio" value="option2" checked>
+                <label class="form-check-label" for="radio2">User</label>
+            </div>
+            <p> </p>
+            <label for="email">Username : </label>
+            <p> </p>
+            <input type="text" class="form-control" id="account" placeholder="Enter account" name="username">
+            <p> </p>
+            <label for="pwd">Password : </label>
+            <p> </p>
+            <input type="password" class="form-control" id="password" placeholder="Enter password"name="password">
+            <p> </p>
+            <button class="btn btn-secondary" type="submit"> Add New User </button>
+        </form>
+    </div>
+
+</div>
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <h4> IoT Users Management </h4>
+            <table class="table table-dark">
+                <thead>
+                    <tr class="table table-info">
+                        <th>Index</th>
+                        <th>User Name</th>
+                        <th>User Type</th>
+                        <th>User Password </th>
+                        <th>Change User Password</th>
+                        <th>Delete User </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts['users'] %}
+                        <tr>
+                            <td> {{ loop.index0 }} </td>
+                            <td> {{ post['username'] }} </td>
+                            <td> {{ post['usertype'] }} </td>
+                            <td> 
+                                ********
+                                <button type="button" class="btn btn-primary btn-sm" onclick="clip_div('{{ post['password'] }}')">Copy to clipboard</button>
+                            </td>
+                            <td>
+                                <form method="POST" action="{{ url_for('setpassword', username=post['username']) }}">
+                                    <div class="input-group mb-3 input-group-sm">
+                                    <input name="newpassword" type="password" class="form-control" placeholder="Input new password and press the reset button" style="width: 4%;">
+                                    <button class="btn btn-warning btn-sm" type="submit" onclick=" return confirm('Confirm reset password of the user: {{ post['username'] }}?')">Reset Password</button>
+                                    </div>
+                                </form>
+                            </td>
+                            <td>
+                                {% if post['username'] == 'admin' %}
+                                    -- 
+                                {% else %}
+                                    <form action="{{ url_for('changeAcc', username=post['username'], action='delete') }}" method="POST">
+                                        <input type="submit" value="Delete" class="btn btn-danger btn-sm"
+                                            onclick=" return confirm('Confirm remove the user: {{ post['username'] }} ?')">
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
+        <button class="btn btn-success" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo"> [+] Create New User </button>
+        <br>
+    </li>
+</ul>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-info"> {{ messages[0] }} </div>
+    {% endif %}
+{% endwith %}
+
+<script>
+    function clip_text(a_string){
+        var input = document.createElement('input');
+        input.id="__copyText__";
+        input.value = a_string; // OOPS! document.getElementById(divId).innerText;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        var txt = input.value;
+        input.remove();
+        console.log("OK COPIED: '"+txt+"'");
+    }
+    function clip_div(a_string){
+        return clip_text(a_string);
+        //return clip_text(document.getElementById(divId).innerText)
+    }
+</script>
+
+{% endblock %}

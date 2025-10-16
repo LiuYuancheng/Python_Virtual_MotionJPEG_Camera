@@ -1,0 +1,85 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<hr>
+<div class="row">
+
+    <div class="col-sm-1">
+        <p> </p>
+    </div>
+
+    <div class="col-sm-2">
+
+        <ul class="list-group">
+
+            <li class="list-group-item">
+                <div class="list-group">
+                    <a href="{{ url_for('index')}}"
+                        class="list-group-item list-group-item-action {% if posts['page'] == 0 %} bg-secondary {% endif %}">
+                        <b class="{% if posts['page'] == 0 %} text-white {% endif %} "> Home </b>
+                    </a>
+                </div>
+            </li>
+            
+            <li class="list-group-item">
+                {% if current_user.is_authenticated %}
+
+                <div class="list-group">
+                    <a href="{{ url_for('liveview')}}"
+                        class="list-group-item list-group-item-action {% if posts['page'] == 1 %} bg-warning {% endif %}">
+                        <b class="{% if posts['page'] == 1 %} text-white {% endif %} "> Live View </b>
+                    </a>
+                </div>
+
+                <div class="list-group">
+                    <a href="#"
+                        class="list-group-item list-group-item-action {% if posts['page'] == 2 %} bg-success {% endif %}">
+                        <b class="{% if posts['page'] == 2 %} text-white {% endif %} "> Access Configuration </b>
+                    </a>
+                </div>
+
+                {% if current_user.name=='admin'%}
+                <div class="list-group">
+                    <a href="{{ url_for('accmgmt')}}"
+                        class="list-group-item list-group-item-action {% if posts['page'] == 3 %} bg-success {% endif %}">
+                        <b class="{% if posts['page'] == 3 %} text-white {% endif %} "> User Configuration </b>
+                    </a>
+                </div>
+                {%endif%}
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action" href="{{ url_for('auth.logout') }}"> <b> Logout
+                        </b> </a>
+                </div>
+                {% else %}
+
+                <form method="POST" action="/login">
+                    <div class="mb-3 mt-3">
+                        <label for="email">Account:</label>
+                        <input type="text" class="form-control" id="account" placeholder="Enter account" name="account">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pwd">Password:</label>
+                        <input type="password" class="form-control" id="password" placeholder="Enter password"
+                            name="password">
+                    </div>
+                    <div class="form-check mb-3">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="remember"> Remember me
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                </form>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-sm-8">
+        {% block mgmContent %}
+        {% endblock %}
+    </div>
+    <div class="col-sm-1">
+        <p> </p>
+    </div>
+</div>
+{% endblock %}

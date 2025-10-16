@@ -1,0 +1,13 @@
+{% extends "mgmbase.html" %}
+
+{% block style %}
+{% endblock %}
+
+{% block mgmContent %}
+    <div class="h-100 p-5 text-bg-dark rounded-3">
+        <h3 class="text-info"> Live Motion JPEG Video Steam</h3>
+        {% if posts['src'] == 'video_feed'%}
+            <img src="{{ url_for('video_feed') }}" alt="new Image" width="900" height="500">
+        {% endif %}
+    </div>
+{% endblock %}
