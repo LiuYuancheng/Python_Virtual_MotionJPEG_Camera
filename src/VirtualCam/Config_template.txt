@@ -1,0 +1,48 @@
+# This is the config file template for the module <webCamApp.py>
+# Setup the parameter with below format (every line follows <key>:<val> format, the
+# key can not be changed):
+
+#-----------------------------------------------------------------------------
+# Test mode flag, 
+# - True: capture the camera image from data set 
+# - False: capture the camera image from real camera
+CAM_MD:2
+
+#-----------------------------------------------------------------------------
+# Camera Admin user config and user record file. 
+USERS_RCD:users.json
+
+#-----------------------------------------------------------------------------
+# Define physical world simulator IP
+RW_IP:127.0.0.1
+
+# Define physical world simulator connection port
+RW_PORT:3001
+
+RW_REFRESH_TIME:1
+
+# Physical world reconnection time 
+RW_RECONN_TIME:10
+
+#-----------------------------------------------------------------------------
+# Camera video source parameter:
+
+# Simulated camera report to RW ID:
+CAM_ID:RW_CAM_REAL
+
+# Physical camera ID
+CAM_IDX:0
+
+CAM_FPS:6
+
+# Simulated camera data set parameters:
+CAM_DATA_DIR:takeoff
+CAM_DATA_PREFIX:takeoff-
+CAM_DATA_START_IDX:6
+CAM_DATA_END_IDX:53
+
+#-----------------------------------------------------------------------------
+# Init the Flask app parameters
+FLASK_SER_PORT:5000
+FLASK_DEBUG_MD:False
+FLASK_MULTI_TH:True
