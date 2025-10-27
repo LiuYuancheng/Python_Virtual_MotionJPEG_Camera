@@ -16,7 +16,7 @@
 """ 
     Design Purpose: we want to generate the motion jpeg video stream which can 
     fetch the video frame from a web-cam/live video source or an images data set 
-    directory. Then provide the video steam to a flask web page.
+    directory. Then provide the video stream to a flask web page.
     Motion JPEG formats: https://en.wikipedia.org/wiki/Motion_JPEG
     
     Usage: 
