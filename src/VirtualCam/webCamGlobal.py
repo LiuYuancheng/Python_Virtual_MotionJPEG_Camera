@@ -97,6 +97,7 @@ gflaskHost = '0.0.0.0'
 gflaskPort = int(CONFIG_DICT['FLASK_SER_PORT']) if 'FLASK_SER_PORT' in CONFIG_DICT.keys() else 5000
 gflaskDebug = CONFIG_DICT['FLASK_DEBUG_MD']
 gflaskMultiTH =  CONFIG_DICT['FLASK_MULTI_TH']
+gflaskToken = CONFIG_DICT['FLASK_FIXED_TOKEN']
 
 #-------<GLOBAL INSTANCES>-----------------------------------------------------
 iUserMgr = None 

@@ -1,0 +1,60 @@
+{% extends 'mgmbase.html'%}
+
+{% block style %}
+{% endblock %}
+
+{% block mgmContent %}
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <h4> IoT Access Configuration </h4>
+        <table class="table table-dark">
+                <thead>
+                    <tr class="table table-info">
+                        <th>Token Type</th>
+                        <th style="width:60%">Token Value</th>
+                        <th>Generate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Fixed</td>
+                        <td>
+                            {{ posts['tokens']['fixed'] }}
+                            <button type="button" class="btn btn-primary btn-sm" onclick="clip_div('{{ posts['tokens']['fixed'] }}')">Copy to clipboard</button>
+                            </td>
+                        <td>--</td>
+                    </tr>
+                    <tr>
+                        <td>Temporary</td>
+                        <td>
+                            <div id="temp_token" style="display: inline-table">{{ posts['tokens']['temp'] }}</div>
+                            <button type="button" class="btn btn-primary btn-sm" id="temp_token_copy" onclick="clip_div('{{ posts['tokens']['temp'] }}')" style="display: none">Copy to clipboard</button>
+                            <form action="{{ url_for('temp_token', action='delete') }}" method="post" style="display: inline">
+                                <button type="submit" class="btn btn-danger" id="temp_token_del" style="display: none"> X </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{{ url_for('temp_token', action='generate') }}" method="post">
+                                <button class="btn btn-success" type="submit"> Generate Token </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+        </table>
+    </li>
+</ul>
+
+<script src="{{url_for('static', filename='functions.js')}}"></script>
+<script>
+    if (document.getElementById("temp_token").innerHTML) {
+        document.getElementById('temp_token_copy').style.display = 'inline';
+        document.getElementById('temp_token_del').style.display = 'inline';
+    }
+    else {
+        document.getElementById('temp_token_copy').style.display = 'none';
+        document.getElementById('temp_token_del').style.display = 'none';
+    }
+</script>
+
+{% endblock %}

@@ -16,9 +16,11 @@
 from datetime import timedelta
 
 import cv2
+import secrets
 # import flask module to create the server.
 from flask import Flask, Response, render_template, flash, url_for, redirect, request
 from flask_login import LoginManager, login_required
+
 
 import webCamGlobal as gv
 import virtualCamera as cam
@@ -33,6 +35,7 @@ def createApp():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = gv.APP_SEC_KEY
     app.config['REMEMBER_COOKIE_DURATION'] = timedelta(seconds=gv.COOKIE_TIME)
+    app.config['TOKENS'] = {'fixed': gv.gflaskToken}
     from webCamAuth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
     # Create the user login manager
@@ -162,6 +165,26 @@ def transfer_image(token):
             response.headers['Content-Disposition'] = 'attachment; filename=flask_image.jpg'
             return response
     return "404 Image Not Found"
+
+#-----------------------------------------------------------------------------
+@app.route('/accconfig')
+@login_required
+def accconfig():
+    posts = {'page': 2,
+             'tokens': app.config['TOKENS']
+            }
+    return render_template('accconfig.html', posts=posts)
+
+@app.route('/temptoken/<string:action>', methods=['POST', ])
+@login_required
+def temp_token(action):
+    """ For handling temporary token"""
+    if action == 'generate':
+        temp_token = secrets.token_hex(16)
+        app.config['TOKENS']['temp'] = temp_token
+    elif action == 'delete':
+            del app.config['TOKENS']['temp']
+    return redirect(url_for('accconfig'))
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
