@@ -2,7 +2,8 @@
 #-----------------------------------------------------------------------------
 # Name:        camDashboardRun.py
 #
-# Purpose:     This module is multi camera view dashboard application.
+# Purpose:     This module is the main wx GUI frame of the multi camera view 
+#              monitor dashboard application.
 #              
 # Author:      Yuancheng Liu
 #
@@ -14,7 +15,8 @@
 """
     System Design Purpose: 
         This module is the multi-camera monitoring dashboard application to fetch 
-        the motion-jpeg ideo from different virtual cameras via http request.
+        the motion-jpeg video stream from different virtual cameras via http GET 
+        request, then show them in one window.
 """
 import time
 import wx
@@ -58,20 +60,19 @@ class UIFrame(wx.Frame):
         self.timer.Start(gv.PERIODIC)  # every 500 ms
         self.Bind(wx.EVT_CLOSE, self.onClose)
         if not gv.TEST_MD and gv.iDataMgr: gv.iDataMgr.start()
-        gv.gDebugPrint("Multi Camera View Dashboard UI Frame Inited, test mode: %s" % str(gv.TEST_MD), 
+        gv.gDebugPrint("Multi Cameras View Dashboard UI Frame Inited, test mode: %s" % str(gv.TEST_MD), 
                        logType=gv.LOG_INFO)
 
     #-----------------------------------------------------------------------------
     def _initGlobals(self):
         """ Init the global parameters used only by this module."""
         if not gv.TEST_MD:
-            # build the url list
+            # build the image fetch url list with the motion jpeg url and the access token.
             camConfigDict = gv.iCamConfigLoader.getJsonData()
             urlList = []
-            for item in camConfigDict.values():
-                print(item)
-                urlStr= item['url']+item['token']
-                urlList.append(urlStr)
+            for val in camConfigDict.values():
+                urlStr = str(val['url']+val['token']).strip() if val['url'] and val['token'] else None
+                urlList.append(urlStr) 
             gv.iDataMgr = dataMgr.camStreamDataManager(self, urlList)
 
     #-----------------------------------------------------------------------------
@@ -90,10 +91,9 @@ class UIFrame(wx.Frame):
     def _buildUISizer(self):
         flagsL = wx.LEFT
         mSizer = wx.BoxSizer(wx.HORIZONTAL)
-        camConfigDict = gv.iCamConfigLoader.getJsonData()
-        gSizer = wx.GridSizer(2, 2, 2, 2)
-        for key in camConfigDict.keys():
-            imagePnl = camDashboardPanel.PanelImage(self, panelSize=(900, 500))
+        gSizer = wx.GridSizer(2, 2, 5, 5)
+        for key in gv.iCamConfigLoader.getJsonData().keys():
+            imagePnl = camDashboardPanel.PanelImage(self, panelSize=(900, 480))
             self.camPanelDict[key] = imagePnl
             gSizer.Add(imagePnl, 0, flagsL, 5)
         mSizer.Add(gSizer, 0, flagsL, 5)
@@ -109,7 +109,7 @@ class UIFrame(wx.Frame):
             self.lastPeriodicTime = now
             camConfigDict = gv.iCamConfigLoader.getJsonData()
             for key in camConfigDict.keys():
-                urlStr= camConfigDict[key]['url']+camConfigDict[key]['token']
+                urlStr= camConfigDict[key]['url']+camConfigDict[key]['token'] if camConfigDict[key]['url'] and camConfigDict[key]['token'] else None
                 bitmap = gv.iDataMgr.getImageBitmap(urlStr)
                 self.camPanelDict[key].updateBitmap(bitmap)
                 self.camPanelDict[key].updateDisplay()

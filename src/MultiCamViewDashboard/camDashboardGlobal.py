@@ -1,13 +1,13 @@
 #-----------------------------------------------------------------------------
-# Name:        towerHMIGlobal.py
+# Name:        camDashboardGlobal.py
 #
 # Purpose:     This module is used as a local config file to set constants, 
 #              global parameters which will be used in the other modules.
 #              
 # Author:      Yuancheng Liu
 #
-# Created:     2025/07/26
-# Version:     v_0.1.2
+# Created:     2025/07/27
+# Version:     v_0.0.2
 # Copyright:   Copyright (c) 2025 Liu Yuancheng
 # License:     MIT License
 #-----------------------------------------------------------------------------
@@ -23,7 +23,7 @@ import os, sys
 print("Current working directory is : %s" % os.getcwd())
 DIR_PATH = dirpath = os.path.dirname(os.path.abspath(__file__))
 print("Current source code location : %s" % dirpath)
-APP_NAME = ('TowerControl', 'TowerHMI')
+APP_NAME = ('cameraMonitor', 'Dashboard')
 
 TOP_DIR = 'src'
 LIB_DIR = 'lib'
@@ -71,13 +71,19 @@ CONFIG_DICT = iConfigLoader.getJson()
 #------<IMAGES PATH>-------------------------------------------------------------
 
 ICO_PATH = os.path.join(IMG_DIR, "logo_small.png")
-UI_TITLE = CONFIG_DICT['UI_TITLE']
-TEST_MD = CONFIG_DICT['TEST_MD']      # test mode flag, True: the simulator will operate with control logic itself. 
-PERIODIC = 500      # update the main in every 300ms
 BGIMG_PATH = os.path.join(IMG_DIR, "bg.jpeg")
 
+UI_TITLE = CONFIG_DICT['UI_TITLE']
+TEST_MD = CONFIG_DICT['TEST_MD']    # test mode flag,
+PERIODIC = 500      # update the main in every 300ms
+
+# load the camera connection configuration file 
 iCamConfigLoader = ConfigLoader.JsonLoader()
-iCamConfigLoader.loadFile(os.path.join(DIR_PATH, CONFIG_DICT["CAM_CONFIG_FILE"]))
+rst = iCamConfigLoader.loadFile(os.path.join(DIR_PATH, CONFIG_DICT["CAM_CONFIG_FILE"]))
+if not rst: 
+    gDebugPrint("Error: load the camera config file: %s" %str(CONFIG_DICT["CAM_CONFIG_FILE"]), 
+                logType=LOG_ERR)
+    exit()
 
 #-------<GLOBAL VARIABLES (start with "g")>------------------------------------
 # VARIABLES are the built in data type.

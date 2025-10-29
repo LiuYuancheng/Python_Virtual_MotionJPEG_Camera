@@ -1,8 +1,35 @@
 {
     "Desktop1": {
-        "name": "Desktop screen shot 1 virtual Camera",
+        "name": "Desktop screenshot 1 virtual Camera",
         "url": "http://127.0.0.1:5000/cgi-bin/mjpg/",
         "token": "motionJPEG",
+        "size": [
+            640,
+            480
+        ]
+    },    
+    "Desktop2": {
+        "name": "Desktop screen shot 2 virtual Camera",
+        "url": null,
+        "token": null,
+        "size": [
+            640,
+            480
+        ]
+    },
+    "RealCam1": {
+        "name": "Desktop screen shot 1 virtual Camera",
+        "url": null,
+        "token": null,
+        "size": [
+            640,
+            480
+        ]
+    },
+    "RealCam2": {
+        "name": "Desktop screen shot 1 virtual Camera",
+        "url": null,
+        "token": null,
         "size": [
             640,
             480

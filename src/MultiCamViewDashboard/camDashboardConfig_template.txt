@@ -1,11 +1,11 @@
-# This is the config file template for the module <ManageHMIRun.py>
+# This is the config file template for the module <camDashboardRun.py>
 # Setup the parameter with below format (every line follows <key>:<value> format, the
 # key can not be changed):
 
 #-----------------------------------------------------------------------------
 # Test mode:
-# - True: run the UI with out connect to the PLC modules.
-# - False: connect to PLC via IEC104, fetch and set the PLC real state.
+# - True: run the UI with out connect to the cameras.
+# - False: connect to the cameras and fetch the vide stream.
 #TEST_MD:True
 TEST_MD:False
 
@@ -16,4 +16,8 @@ TEST_MD:False
 UI_TITLE: Multi-Camera View Monitor Dashboard
 
 # Define update clock interval
-CLK_INT:1
+CLK_INT:0.5
+
+#-----------------------------------------------------------------------------
+# camera connection configuration file.
+CAM_CONFIG_FILE:cameraConfig.json

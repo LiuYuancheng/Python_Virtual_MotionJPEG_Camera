@@ -1,14 +1,14 @@
 #!/usr/bin/python
 #-----------------------------------------------------------------------------
-# Name:        mgmHMIPlcDataMgr.py
+# Name:        camDashboardDataMgr.py
 #
-# Purpose:     Data management module to start a sub-thread to connect to the 
-#              PLCs fetch the plc state and send control request.
+# Purpose:     Data management module to start fetch motion jpeg video stream 
+#              from different virtual camera and save the data as wx bitmap. 
 #
 # Author:      Yuancheng Liu
 #
-# Created:     2025/06/13
-# Version:     v_0.0.3
+# Created:     2025/10/27
+# Version:     v_0.0.2
 # Copyright:   Copyright (c) 2025 LiuYuancheng
 # License:     MIT License
 #-----------------------------------------------------------------------------
@@ -53,9 +53,9 @@ class camStreamDataManager(threading.Thread):
         except requests.exceptions.RequestException as e:
             gv.gDebugPrint("Error: getJPGImgFile() error occurred during the request: %s" %str(e), logType=gv.LOG_ERR)
 
-
     #-----------------------------------------------------------------------------
     def getJPGImgDataBM(self, url):
+        if url is None: return None
         try:
             response = requests.get(url, timeout=1)
             if response.status_code == 200:

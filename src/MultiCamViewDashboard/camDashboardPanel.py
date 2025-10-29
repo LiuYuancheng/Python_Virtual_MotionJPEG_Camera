@@ -1,8 +1,8 @@
 #-----------------------------------------------------------------------------
-# Name:        towerHMIGlobal.py
+# Name:        camDashboardPanel.py
 #
-# Purpose:     This module is used as a local config file to set constants, 
-#              global parameters which will be used in the other modules.
+# Purpose:     This module will provide the panels for the multi camera view
+#              monitor dashboard.
 #              
 # Author:      Yuancheng Liu
 #
@@ -18,7 +18,7 @@ import camDashboardGlobal as gv
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
 class PanelImage(wx.Panel):
-    """ Panel to display image. """
+    """ Panel to display the camera image. """
 
     def __init__(self, parent, panelSize=(640, 480)):
         wx.Panel.__init__(self, parent, size=panelSize)
@@ -38,7 +38,7 @@ class PanelImage(wx.Panel):
             dc.DrawBitmap(self._scaleBitmap(self.bmp, w, h), 0, 0)
         else:
             dc.DrawBitmap(self._scaleBitmap(self.defaultBmp, w, h), 0, 0)
-
+            
     #-----------------------------------------------------------------------------
     def _scaleBitmap(self, bitmap, width, height):
         """ Resize a input bitmap.(bitmap-> image -> resize image -> bitmap)"""
