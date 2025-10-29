@@ -186,7 +186,7 @@ def temp_token(action):
         temp_token = secrets.token_hex(16)
         app.config['TOKENS']['temp'] = temp_token
     elif action == 'delete':
-            del app.config['TOKENS']['temp']
+        del app.config['TOKENS']['temp']
     return redirect(url_for('accconfig'))
 
 # -----------------------------------------------------------------------------

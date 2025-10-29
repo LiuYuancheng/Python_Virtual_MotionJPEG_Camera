@@ -1,0 +1,11 @@
+{
+    "Desktop1": {
+        "name": "Desktop screen shot 1 virtual Camera",
+        "url": "http://127.0.0.1:5000/cgi-bin/mjpg/",
+        "token": "motionJPEG",
+        "size": [
+            640,
+            480
+        ]
+    }
+}

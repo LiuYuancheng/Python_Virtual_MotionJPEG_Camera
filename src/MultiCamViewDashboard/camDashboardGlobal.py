@@ -69,26 +69,21 @@ if iConfigLoader is None:
 CONFIG_DICT = iConfigLoader.getJson()
 
 #------<IMAGES PATH>-------------------------------------------------------------
-#import wxImageLoader
-#iImageLoader = wxImageLoader.ImageLoader(IMG_DIR)
+
 ICO_PATH = os.path.join(IMG_DIR, "logo_small.png")
 UI_TITLE = CONFIG_DICT['UI_TITLE']
 TEST_MD = CONFIG_DICT['TEST_MD']      # test mode flag, True: the simulator will operate with control logic itself. 
 PERIODIC = 500      # update the main in every 300ms
-
 BGIMG_PATH = os.path.join(IMG_DIR, "bg.jpeg")
+
+iCamConfigLoader = ConfigLoader.JsonLoader()
+iCamConfigLoader.loadFile(os.path.join(DIR_PATH, CONFIG_DICT["CAM_CONFIG_FILE"]))
 
 #-------<GLOBAL VARIABLES (start with "g")>------------------------------------
 # VARIABLES are the built in data type.
-
 gUpdateRate = float(CONFIG_DICT['CLK_INT'])    # main frame update rate 1 sec.
-
-gPlcDataFetchTime = 1 # time interval to fetch PLC data.
 
 #-------<GLOBAL INSTANCES (start with "i")>------------------------------------
 # INSTANCES are the user defined data type.
 iMainFrame = None   # UI MainFrame.
-iCtrlPanel = None   # UI function control panel.
-iMapPanel = None    # UI map display panel
-iMapMgr = None
 iDataMgr = None 

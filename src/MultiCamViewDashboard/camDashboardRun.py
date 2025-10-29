@@ -14,10 +14,9 @@
 """
     System Design Purpose: 
         This module is the multi-camera monitoring dashboard application to fetch 
-        the video from different virtual cameras vir motion-jpeg.
+        the motion-jpeg ideo from different virtual cameras via http request.
 """
 import time
-import random
 import wx
 
 import camDashboardGlobal as gv
@@ -29,8 +28,8 @@ HELP_MSG="""
 If there is any bug, please contact:
  - Author:      Yuancheng Liu 
  - Email:       liu_yuan_cheng@hotmail.com 
- - Created:     2025/06/03 
- - GitHub Link: https://github.com/LiuYuancheng/Railway_IT_OT_System_Cyber_Security_Platform
+ - Created:     2025/10/27 
+ - GitHub Link: https://github.com/LiuYuancheng/Python_Virtual_MotionJPEG_Camera
 """
 
 #-----------------------------------------------------------------------------
@@ -45,6 +44,7 @@ class UIFrame(wx.Frame):
         #self.SetIcon(wx.Icon(gv.ICO_PATH))
         self._initGlobals()
         # Build UI sizer
+        self.camPanelDict = {}
         self._buildMenuBar()
         self.SetSizer(self._buildUISizer())
         self.statusbar = self.CreateStatusBar(1)
@@ -52,41 +52,27 @@ class UIFrame(wx.Frame):
         # Init the local parameters:
         self.updateLock = False
         # Set the periodic call back
-        #self.updatePlcConIndicator()
         self.lastPeriodicTime = time.time()
         self.timer = wx.Timer(self)
         self.Bind(wx.EVT_TIMER, self.periodic)
         self.timer.Start(gv.PERIODIC)  # every 500 ms
         self.Bind(wx.EVT_CLOSE, self.onClose)
-
         if not gv.TEST_MD and gv.iDataMgr: gv.iDataMgr.start()
-        gv.gDebugPrint("Railway Management HMI Inited, test mode: %s" % str(gv.TEST_MD), 
+        gv.gDebugPrint("Multi Camera View Dashboard UI Frame Inited, test mode: %s" % str(gv.TEST_MD), 
                        logType=gv.LOG_INFO)
 
     #-----------------------------------------------------------------------------
     def _initGlobals(self):
         """ Init the global parameters used only by this module."""
-        if not gv.TEST_MD: 
-            gv.iDataMgr = dataMgr.camStreamDataManager(self, ['http://127.0.0.1:5000/cgi-bin/mjpg/motionJPEG'])
-
-    #-----------------------------------------------------------------------------
-    def _loadImageFiles(self):
-        """ Load the image files from the image folder. """
-        ImageFileDict = {
-            'TIME_LB'   : 'time.png',
-            'ENV_BG'    : 'backgroundGray.png',
-            'PLC_ICON'  : 'plcIcon.png',
-            'R_PAPI'    : 'r_papi3_small.png',
-            'L_PAPI'    : 'l_papi3_small.png',
-            'U_PAPI'    : 'u_papi3_small.png',
-            'D_PAPI'    : 'd_papi3_small.png',
-            'RADAR'     : 'Radar.jpg',
-            'WARNING'   : 'warning_small.png',
-            'ALERT'     : 'alert_small.png',
-            'LOGO_MID'  : 'logo_mid.png'
-        }
-        for key, value in ImageFileDict.items():
-            gv.iImageLoader.addImage(key, value)
+        if not gv.TEST_MD:
+            # build the url list
+            camConfigDict = gv.iCamConfigLoader.getJsonData()
+            urlList = []
+            for item in camConfigDict.values():
+                print(item)
+                urlStr= item['url']+item['token']
+                urlList.append(urlStr)
+            gv.iDataMgr = dataMgr.camStreamDataManager(self, urlList)
 
     #-----------------------------------------------------------------------------
     def _buildMenuBar(self):
@@ -104,8 +90,13 @@ class UIFrame(wx.Frame):
     def _buildUISizer(self):
         flagsL = wx.LEFT
         mSizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.imagePnl = camDashboardPanel.PanelImage(self, panelSize=(900, 500))
-        mSizer.Add(self.imagePnl, 0, flagsL, 5)
+        camConfigDict = gv.iCamConfigLoader.getJsonData()
+        gSizer = wx.GridSizer(2, 2, 2, 2)
+        for key in camConfigDict.keys():
+            imagePnl = camDashboardPanel.PanelImage(self, panelSize=(900, 500))
+            self.camPanelDict[key] = imagePnl
+            gSizer.Add(imagePnl, 0, flagsL, 5)
+        mSizer.Add(gSizer, 0, flagsL, 5)
         mSizer.AddSpacer(5)
         return mSizer
 
@@ -116,9 +107,12 @@ class UIFrame(wx.Frame):
         if (not self.updateLock) and now - self.lastPeriodicTime >= gv.gUpdateRate:
             print("main frame update at %s" % str(now))
             self.lastPeriodicTime = now
-            bitmap = gv.iDataMgr.getImageBitmap('http://127.0.0.1:5000//cgi-bin/mjpg/motionJPEG')
-            self.imagePnl.updateBitmap(bitmap)
-            self.imagePnl.updateDisplay()
+            camConfigDict = gv.iCamConfigLoader.getJsonData()
+            for key in camConfigDict.keys():
+                urlStr= camConfigDict[key]['url']+camConfigDict[key]['token']
+                bitmap = gv.iDataMgr.getImageBitmap(urlStr)
+                self.camPanelDict[key].updateBitmap(bitmap)
+                self.camPanelDict[key].updateDisplay()
 
     #-----------------------------------------------------------------------------
     def onHelp(self, event):

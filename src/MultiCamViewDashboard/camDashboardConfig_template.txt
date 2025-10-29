@@ -1,0 +1,19 @@
+# This is the config file template for the module <ManageHMIRun.py>
+# Setup the parameter with below format (every line follows <key>:<value> format, the
+# key can not be changed):
+
+#-----------------------------------------------------------------------------
+# Test mode:
+# - True: run the UI with out connect to the PLC modules.
+# - False: connect to PLC via IEC104, fetch and set the PLC real state.
+#TEST_MD:True
+TEST_MD:False
+
+#-----------------------------------------------------------------------------
+# Define all the HMI UI config parameters
+
+# define UI title name 
+UI_TITLE: Multi-Camera View Monitor Dashboard
+
+# Define update clock interval
+CLK_INT:1
