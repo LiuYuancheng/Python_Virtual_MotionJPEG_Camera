@@ -1,17 +1,17 @@
 #------------------------------------------------------------------------------
 # Name:        webCamApp.py
 #
-# Purpose:     A Flask website virtual motion jpeg camera simulation program load 
-#              the image data set from the local directory.
+# Purpose:     A Flask IoT virtual Motion-JPEG camera simulation program with a 
+#              web page interface, it can load the video source from real camera, 
+#              pre-saved video files or screen capture.
 #
 # Author:      Yuancheng Liu
 #
 # Created:     2025/10/15 
-# version:     v_0.0.1
+# version:     v_0.0.2
 # Copyright:   Copyright (c) 2025 LiuYuancheng
 # License:     MIT License
 #------------------------------------------------------------------------------
-
 
 from datetime import timedelta
 
@@ -20,7 +20,6 @@ import secrets
 # import flask module to create the server.
 from flask import Flask, Response, render_template, flash, url_for, redirect, request
 from flask_login import LoginManager, login_required
-
 
 import webCamGlobal as gv
 import virtualCamera as cam
