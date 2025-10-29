@@ -7,8 +7,8 @@
 # Author:      Yuancheng Liu
 #
 # Created:     2014/01/15
-# Copyright:   
-# License:     
+# Copyright:   Copyright (c) 2014 LiuYuancheng
+# License:     MIT License 
 #-----------------------------------------------------------------------------
 
 """
@@ -20,15 +20,17 @@ Description:
 - provide the module used for the infra monitor hub's frontend web host and the 
 backend data base handler .
 
-Modules inclided in the current package: 
+Modules include in the current package: 
 
 1. ConfigLoader: 
-provide API to load the not stand text format config file's data.
+    provide API to load the not stand text format config file's data.
 
 2. Log.py: 
-provide the addtional log function to do the program execution log archiving feature.
+    provide the additional log function to do the program execution log archiving feature.
 
-3. UdoCom: 
-provide UDP communication API in the distribution system.
+3. virtualCamera: 
+    provide virtual camera module to simulate the camera's video stream.
 
+4. virtualCameraTest:
+    provide the test case module of the virtual camera module <virtualCamera.py>
 """

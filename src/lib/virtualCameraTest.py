@@ -23,7 +23,7 @@ print("Run the web virtual camera module with video source:\n\
     \t (1) Image data set in folder\n\
     \t (2) Screen capture\n\" \
     \t (3) Capture from a not minimized windows App\n\
-    \t (3) exit")
+    \t (3) Exit")
 testCase = int(input('Input your choice:'))
 
 #-----------------------------------------------------------------------------
