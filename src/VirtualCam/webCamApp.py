@@ -160,7 +160,7 @@ def setpassword(username):
 @app.route('/cgi-bin/mjpg/<string:token>', methods=['GET','POST'])
 def transfer_image(token):
     """ Handle file upload from web UI."""
-    if token == '123':
+    if token in app.config['TOKENS'].values():
         cv2Frame = gv.iCamMgr.getOneFrame()
         if cv2Frame is not None:
             ret, buffer = cv2.imencode('.jpg', cv2Frame)

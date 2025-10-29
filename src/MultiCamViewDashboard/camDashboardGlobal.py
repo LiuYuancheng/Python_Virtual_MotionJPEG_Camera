@@ -1,0 +1,94 @@
+#-----------------------------------------------------------------------------
+# Name:        towerHMIGlobal.py
+#
+# Purpose:     This module is used as a local config file to set constants, 
+#              global parameters which will be used in the other modules.
+#              
+# Author:      Yuancheng Liu
+#
+# Created:     2025/07/26
+# Version:     v_0.1.2
+# Copyright:   Copyright (c) 2025 Liu Yuancheng
+# License:     MIT License
+#-----------------------------------------------------------------------------
+"""
+    For good coding practice, follow the following naming convention:
+        1) Global variables should be defined with initial character 'g'
+        2) Global instances should be defined with initial character 'i'
+        2) Global CONSTANTS should be defined with UPPER_CASE letters
+"""
+
+import os, sys
+
+print("Current working directory is : %s" % os.getcwd())
+DIR_PATH = dirpath = os.path.dirname(os.path.abspath(__file__))
+print("Current source code location : %s" % dirpath)
+APP_NAME = ('TowerControl', 'TowerHMI')
+
+TOP_DIR = 'src'
+LIB_DIR = 'lib'
+IMG_DIR = os.path.join(DIR_PATH, 'img')
+
+idx = dirpath.rfind(TOP_DIR)
+gTopDir = dirpath[:idx + len(TOP_DIR)] if idx != -1 else dirpath   # found it - truncate right after TOPDIR
+# Config the lib folder 
+gLibDir = os.path.join(gTopDir, LIB_DIR)
+if os.path.exists(gLibDir):
+    sys.path.insert(0, gLibDir)
+import Log
+Log.initLogger(gTopDir, 'Logs', APP_NAME[0], APP_NAME[1], historyCnt=100, fPutLogsUnderDate=True)
+
+CONFIG_FILE_NAME = 'camDashboardConfig.txt'
+
+# Init the log type parameters.
+DEBUG_FLG   = False
+LOG_INFO    = 0
+LOG_WARN    = 1
+LOG_ERR     = 2
+LOG_EXCEPT  = 3
+# init the log print module.
+def gDebugPrint(msg, prt=True, logType=None):
+    if prt: print(msg)
+    if logType == LOG_WARN:
+        Log.warning(msg)
+    elif logType == LOG_ERR:
+        Log.error(msg)
+    elif logType == LOG_EXCEPT:
+        Log.exception(msg)
+    elif logType == LOG_INFO or DEBUG_FLG:
+        Log.info(msg)
+
+#-----------------------------------------------------------------------------
+# Init the configure file loader.
+import ConfigLoader
+gGonfigPath = os.path.join(dirpath, CONFIG_FILE_NAME)
+iConfigLoader = ConfigLoader.ConfigLoader(gGonfigPath, mode='r')
+if iConfigLoader is None:
+    print("Error: The config file %s is not exist.Program exit!" %str(gGonfigPath))
+    exit()
+CONFIG_DICT = iConfigLoader.getJson()
+
+#------<IMAGES PATH>-------------------------------------------------------------
+#import wxImageLoader
+#iImageLoader = wxImageLoader.ImageLoader(IMG_DIR)
+ICO_PATH = os.path.join(IMG_DIR, "logo_small.png")
+UI_TITLE = CONFIG_DICT['UI_TITLE']
+TEST_MD = CONFIG_DICT['TEST_MD']      # test mode flag, True: the simulator will operate with control logic itself. 
+PERIODIC = 500      # update the main in every 300ms
+
+BGIMG_PATH = os.path.join(IMG_DIR, "bg.jpeg")
+
+#-------<GLOBAL VARIABLES (start with "g")>------------------------------------
+# VARIABLES are the built in data type.
+
+gUpdateRate = float(CONFIG_DICT['CLK_INT'])    # main frame update rate 1 sec.
+
+gPlcDataFetchTime = 1 # time interval to fetch PLC data.
+
+#-------<GLOBAL INSTANCES (start with "i")>------------------------------------
+# INSTANCES are the user defined data type.
+iMainFrame = None   # UI MainFrame.
+iCtrlPanel = None   # UI function control panel.
+iMapPanel = None    # UI map display panel
+iMapMgr = None
+iDataMgr = None 
