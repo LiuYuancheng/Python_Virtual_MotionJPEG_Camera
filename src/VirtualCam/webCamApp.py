@@ -55,8 +55,12 @@ elif gv.gCamMode == 1:
     gv.iCamMgr = cam.camClientSimu(gv.gCamDir, gv.gCamFilePrefix, fps=gv.gCamFps)
     gv.iCamMgr.setShowTimestamp(True)
     gv.iCamMgr.setTestMode(56)
-else:
+elif gv.gCamMode == 2:
     gv.iCamMgr = cam.camClientScreen(fps=gv.gCamFps)
+else:
+    windowName = "templates - File Explorer"
+    windowName = "2D Airport CAT-II Runway Light System Simulation"
+    camObj = cam.camClientWinApp(windowName)
 
 app = createApp()
 

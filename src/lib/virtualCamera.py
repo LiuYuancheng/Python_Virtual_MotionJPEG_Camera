@@ -100,7 +100,7 @@ class camClient(object):
         self.capture = bool(flag)
 
     def setTextColor(self, color):
-        self.FONT_COLOR = color
+        self.fontColor = color
 
     def setShowTimestamp(self, flag):
         self.showTimestamp = bool(flag)
