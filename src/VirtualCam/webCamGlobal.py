@@ -24,7 +24,7 @@ import sys
 print("Current working directory is : %s" % os.getcwd())
 dirpath = os.path.dirname(os.path.abspath(__file__))
 print("Current source code location : %s" % dirpath)
-APP_NAME = ('WebCam', 'OpRoom')
+APP_NAME = ('VirtualCam', 'webCam')
 
 TOPDIR = 'src'
 LIBDIR = 'lib'

@@ -61,7 +61,7 @@ elif gv.gCamMode == 2:
 else:
     windowName = "templates - File Explorer"
     windowName = "2D Airport CAT-II Runway Light System Simulation"
-    camObj = cam.camClientWinApp(windowName)
+    gv.iCamMgr = cam.camClientWinApp(windowName)
 
 app = createApp()
 

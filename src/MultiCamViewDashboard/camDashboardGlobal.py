@@ -79,11 +79,7 @@ PERIODIC = 500      # update the main in every 300ms
 
 # load the camera connection configuration file 
 iCamConfigLoader = ConfigLoader.JsonLoader()
-rst = iCamConfigLoader.loadFile(os.path.join(DIR_PATH, CONFIG_DICT["CAM_CONFIG_FILE"]))
-if not rst: 
-    gDebugPrint("Error: load the camera config file: %s" %str(CONFIG_DICT["CAM_CONFIG_FILE"]), 
-                logType=LOG_ERR)
-    exit()
+iCamConfigLoader.loadFile(os.path.join(DIR_PATH, CONFIG_DICT["CAM_CONFIG_FILE"]))
 
 #-------<GLOBAL VARIABLES (start with "g")>------------------------------------
 # VARIABLES are the built in data type.
