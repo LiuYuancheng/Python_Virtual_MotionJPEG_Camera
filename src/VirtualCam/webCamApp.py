@@ -46,6 +46,7 @@ def createApp():
         return webCamAuth.User(userID)
     return app
 
+# -----------------------------------------------------------------------------
 # Init the user manager
 gv.iUserMgr = webCamAuth.userMgr(gv.gUsersRcd)
 # use real camera

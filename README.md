@@ -1,14 +1,18 @@
 # Python_Virtual_Motion-JPEG_Camera_Simulator
 
-**Project Design Purpose** : This project is a python virtual motion jpeg camera simulation program to with a flask web interface provide the video stream to browser or other program. The web interface UI design followed the Axis IP camera's web style so it can be used a camera honeypot. The camera simulator can capture the real video frame from 5 different type of source: 
+**Project Design Purpose** : This project is designed to create a lightweight, extensible camera-simulation service program that exposes a Motion-JPEG (MJPEG) video stream over HTTP via a Flask web interface for the cyber ranges, red/blue exercises, and research where realistic camera endpoints are required without physical hardware. The simulated video stream can be generated from five different type of source:
 
-- A real camera such as desktop embed camera on or USB camera , 
-- Other live video stream source such RTSP steam. 
-- A pre-configured images file data set in a directory 
-- the part or entire of the desktop screen shot.
-- Capture from a running app window.(windows platform only)
+- Local physical camera (embedded webcam or USB camera).
 
-The Virtual camera can be sued in cyber range as the attack target, use a camera honey port to collect the attack data set,  collect deferent video sources from VMs or Win-Application and project in on screen/dashboard.
+- External live stream (RTSP/HTTP source).
+
+- Static or rotating image dataset (images loaded from a directory).
+
+- OS Desktop capture (full or partial screen screenshot).
+
+- Application-window capture (Windows-only; capture a running app window).
+
+The simulator intentionally mimics the web UI and behavior of [Axis IP cameras](https://www.axis.com/en-sg) so it can be deployed as a believable camera honeypot or as a drop-in replacement for testing and integration. 
 
 ```python
 # Author:      Yuancheng Liu
