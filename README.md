@@ -12,7 +12,7 @@
 
 - Application-window capture (Windows-only; capture a running app window).
 
-The simulator intentionally mimics the web UI and behavior of [Axis IP cameras](https://www.axis.com/en-sg) so it can be deployed as a believable camera honeypot or as a drop-in replacement for testing and integration. We will also show a use case of how this project is used to simulate 4 different cameras in the aviation runway cyber range.
+The simulator intentionally mimics the web UI and behavior of [Axis IP cameras](https://www.axis.com/en-sg) so it can be deployed as a believable camera honeypot or as a drop-in replacement for testing and integration. 
 
 ```python
 # Author:      Yuancheng Liu
@@ -44,7 +44,9 @@ The system contents three main components as shown in the below architecture dia
 - **Flask Camera Server** : A management web application that mimics Axis-style camera pages. It exposes camera configuration, stream endpoints, user controls, and logs — making the simulator usable both as a realistic test camera and as a convincing honeypot UI.
 - **Multi-Camera View Monitor Dashboard** : A dashboard program aggregates multiple virtual camera feeds into a single multi-frame view for monitoring or projection on command-center.
 
-#### Typical use cases
+#### Program Typical Use Cases
+
+The system is design for using in build the OT cyber ranges and supporting the cyber exercise, the possible use cases include:  
 
 - Provide instrumented camera endpoints for blue/red team exercises and cyber ranges.
 - Deploy believable camera honeypots to capture attacker behaviour and build datasets.
@@ -52,8 +54,80 @@ The system contents three main components as shown in the below architecture dia
 - Test and validate surveillance clients, analytics pipelines, and dashboards without physical cameras.
 - Aggregate diverse video sources from virtual machines and host applications for demonstrations, QA, or ML dataset generation.
 
+We will also show a use case of how this project is used to simulate 4 different cameras in the aviation runway cyber range.
+
 
 
 ------
 
 ### System Design 
+
+In this section I will introduce the detailed design of the system.
+
+#### Design of Virtual Camera Client Library
+
+The virtual camera module provides a parent `camClient` class with a five steps to transfer the videos stream to browser as shown below:
+
+```mermaid
+flowchart LR
+    A[Frame Capture From Source] --> B
+    B[JPEG Encoding] --> C
+    C[HTTP Streaming] --> D
+    D[Multipart MJPEG Response] --> E
+    E[Browser Renders Live Stream]
+```
+
+**Frame Capture From Source**
+
+All the children class will overwrite the interface function `getOneFrame()` to fetch the related `OpenCV-cv2` Image from the video source it connected.
+
+**JPEG Encoding**
+
+Each cv2 image frame is compressed with the JPEG encoding:
+
+```python
+_, buffer = cv2.imencode('.jpg', frame)
+```
+
+**HTTP Streaming**
+The Flask generator `yields` each JPEG in the HTTP response:
+
+```python
+yield (b'--frame\r\n'
+       b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+```
+
+**Multipart MJPEG Response**
+
+ Tells the browser to expect *multiple JPEG frames* in one continuous HTTP response:
+
+```http
+mimetype='multipart/x-mixed-replace; boundary=frame'
+```
+
+**Browser Renders Live Stream**
+
+In the browser’s `<img>` element, ecodes each incoming JPEG frame in order and displays them — visually creating a video:
+
+```
+<img src="{{ url_for('video_feed') }}" width="900" height="500">
+```
+
+Each child class will inherit the `camClient` class and linked to the related video source as shown below:
+
+```mermaid
+flowchart LR
+    A[camClient] --> B
+    A[camClient] --> C
+    A[camClient] --> D
+    A[camClient] --> E
+    B[camClientReal] --> |Fetch Image| F[Laptop / USB Camera]
+    B[camClientReal] --> |Fetch Image|G[CCTV Camera / Video server use rtsp]
+    C[camClientSimu] --> |Fetch Image|H[Pre-saved Images data set folder]
+    D[camClientScreen] --> |Fetch Image|I[OS desktop reading]
+    E[camClientWinApp] --> |Fetch Image|J[Windows App UI Screenshot]
+```
+
+#### Design of Flask Camera Server
+
+The flask camera server provide the basic IOT camera web pages for the user to change the camera configuration, view the live view of the camera, 
