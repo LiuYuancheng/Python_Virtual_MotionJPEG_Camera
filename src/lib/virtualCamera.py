@@ -18,7 +18,7 @@
     fetch the video frame from 4 types of source: 
         1. a web-cam/live video source
         2. an images data set directory
-        3. capture from desktop.
+        3. capture from screen recording.
         4. capture from a running app window.(windows platform only)
         
     Then provide the video stream to a flask web page. 
