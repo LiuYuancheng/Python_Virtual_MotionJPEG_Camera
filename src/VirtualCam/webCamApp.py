@@ -60,7 +60,8 @@ elif gv.gCamMode == 2:
     gv.iCamMgr = cam.camClientScreen(fps=gv.gCamFps)
 else:
     windowName = "templates - File Explorer"
-    windowName = "2D Airport CAT-II Runway Light System Simulation"
+    #windowName = "2D Airport CAT-II Runway Light System Simulation"
+    #windowName = "Microsoft Edge"
     gv.iCamMgr = cam.camClientWinApp(windowName)
 
 app = createApp()

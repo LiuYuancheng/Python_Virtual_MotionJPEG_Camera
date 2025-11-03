@@ -154,3 +154,23 @@ When the user type in the camera simulator's IP address, they will assess the ho
 After the user login with the correct credentials, the user can see the navigation bars, when the user click the "Live View " to check the current camera live video stream as shown below image, then the user can also adjust the frame resolution and FPS from the live view page. 
 
 ![](doc/img/s_06.png)
+
+**[3] User Configuration Page** 
+
+The user can configure the use login credential in the user configuration page as shown in the below image.  There are 2 type of users: 
+
+- the normal user type user can only view the camera live view, change their own password. the normal user can not check or change the motion-JPEG API call token. 
+- the admin type user can add and deleted other users, reset and check other user's password, and most important the admin user is able to access the motion-JPEG configuration page to create a new API call token. 
+
+![](doc/img/s_07.png)
+
+**[4] Access Token Configuration Page**
+
+For other program which use the motion-JPEG API to fetch the video stream, they need to submit a valid access token to get the the frame. Only the admin user can access the API token configuration page as shown in the below image. 
+
+![](doc/img/s_08.png)
+
+There are 2 type of API access token: 
+
+- Fixed token: The fixed token is pre-configured in the camera local data base and there is no usage limitation. The Fixed token will not lose if we reboot the camera simulator program. 
+- Temporary token: the temporary token is saved in the camera's memory, every time when the admin press the button "Generate a random token", the camera simulator will generate a 16 characters temporary token. The admin can also set the valid period of the temporary token. All the temporary token will be lose when the camera simulator is rebooted. 
