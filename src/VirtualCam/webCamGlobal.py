@@ -103,4 +103,3 @@ gflaskToken = CONFIG_DICT['FLASK_FIXED_TOKEN']
 iUserMgr = None 
 iDataMgr = None
 iCamMgr = None
-iDataMgr = None

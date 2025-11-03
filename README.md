@@ -101,7 +101,7 @@ yield (b'--frame\r\n'
 
  Tells the browser to expect *multiple JPEG frames* in one continuous HTTP response:
 
-```http
+```html
 mimetype='multipart/x-mixed-replace; boundary=frame'
 ```
 
@@ -130,4 +130,27 @@ flowchart LR
 
 #### Design of Flask Camera Server
 
-The flask camera server provide the basic IOT camera web pages for the user to change the camera configuration, view the live view of the camera, 
+The flask camera server provide the basic IOT camera web pages for the user to change the camera configuration, view the live view of the camera, link and map the current display frame with the cyber range physical world simulator scenario, provide the motion JPEG API for other program to fetch. The program work flow diagram is shown below:
+
+![](doc/img/s_04.png)
+
+The module function detail: 
+
+- **Video Source Manager Module** : The wrapper module import and use the related Virtual Camera Client Library to fetch the the image frame from the related video steam source. 
+- **User and Access Management Module** : The manager module linked with the credential data base to control the users login authorization and the Motion JPEG API call accessible .
+- **Data Manager Module** : The data manager module linked to cyber range physical world simulator to fetch the physical components state such as the train/plane position then mapping to the related frame from the video source then to shown in the web live view page. 
+- **Flash Web Service Module** : The main web service module open a configurable port to handle all the http/https requests.
+
+The current Flask web service module provide 4 pages for user to use:
+
+**[1] IP Camera Home Page**
+
+When the user type in the camera simulator's IP address, they will assess the home page as shown below, the user needs to login with the valid username and password to access the other pages. 
+
+![](doc/img/s_05.png)
+
+**[2] IP Camera Home Page**
+
+After the user login with the correct credentials, the user can see the navigation bars, when the user click the "Live View " to check the current camera live video stream as shown below image, then the user can also adjust the frame resolution and FPS from the live view page. 
+
+![](doc/img/s_06.png)
