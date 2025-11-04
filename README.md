@@ -234,3 +234,173 @@ The dashboard supports flexible layout configuration, adjustable FPS, and can di
 ------
 
 ### System Configuration and Usage
+
+Development Environment : Python 3.7.4+
+
+Additional Lib/Software :
+
+| Lib Module    | Version  | Installation                | Lib link                                     |
+| ------------- | -------- | --------------------------- | -------------------------------------------- |
+| Flask         | 1.1.2    | `pip install Flask`         | https://flask.palletsprojects.com/en/stable/ |
+| Flask_Login   | 0.6.2    | `pip install Flask-Login`   | https://pypi.org/project/Flask-Login/        |
+| numpy         | 1.21.6   | `pip install numpy`         | https://pypi.org/project/numpy/              |
+| opencv_python | 4.5.1.48 | `pip install opencv-python` | https://pypi.org/project/opencv-python/      |
+| PyAutoGUI     | 0.9.53   | `pip install PyAutoGUI`     | https://pyautogui.readthedocs.io/en/latest/  |
+| pywin32       | 305      | `pip install pywin32`       | https://pypi.org/project/pywin32/            |
+| requests      | 2.28.1   | `pip install requests`      | https://pypi.org/project/requests/           |
+| win32gui      | 221.6    | `pip install win32gui`      | https://pypi.org/project/win32gui/           |
+| wxPython      | 4.1.0    | `pip install wxPython`      | https://pypi.org/project/wxPython/           |
+
+Program Files List : 
+
+| Program File                             | Execution Env   | Description               |
+| ---------------------------------------- | --------------- | ------------------------- |
+| `src/lib/virtualCamera.py`               | python 3        | Virtual camera lib module |
+| `src/lib/virtualCameraTest.py+templates` | python 3 + HTML | Library test case module. |
+|                                          |                 |                           |
+
+
+
+#### Usage of Virtual Camera
+
+Rename the configuration file template `Config_template.txt` to `Config.txt` and set the parameter as shown below:
+
+```python
+# This is the config file template for the module <webCamApp.py>
+# Setup the parameter with below format (every line follows <key>:<val> format, the
+# key can not be changed):
+#-----------------------------------------------------------------------------
+# Camera mode flag, 
+CAM_MD:2
+#-----------------------------------------------------------------------------
+# Camera Admin user config and user record file. 
+USERS_RCD:users.json
+#-----------------------------------------------------------------------------
+# Define physical world simulator IP
+RW_IP:127.0.0.1
+# Define physical world simulator connection port
+RW_PORT:3001
+RW_REFRESH_TIME:1
+# Physical world reconnection time 
+RW_RECONN_TIME:10
+#-----------------------------------------------------------------------------
+# Camera video source parameter:
+# Simulated camera report to RW ID:
+CAM_ID:RW_CAM_REAL
+# Physical camera ID
+CAM_IDX:0
+CAM_FPS:6
+# Simulated camera data set parameters:
+CAM_DATA_DIR:takeoff
+CAM_DATA_PREFIX:takeoff-
+CAM_DATA_START_IDX:6
+CAM_DATA_END_IDX:53
+#-----------------------------------------------------------------------------
+# Init the Flask app parameters
+FLASK_SER_PORT:5000
+FLASK_DEBUG_MD:False
+FLASK_MULTI_TH:True
+FLASK_FIXED_TOKEN:motionJPEG
+```
+
+Set the Camera mode flag parameter:
+
+- `CAM_MD:1` - From Real camera 
+- `CAM_MD:2` - From image data set
+- `CAM_MD:3` - From desktop screen recording
+- `CAM_MD:4` - From Windows application.
+
+Rename the `users_template.json` to `users.json`  and add the user name and password as shown below:
+
+```json
+    "admin": {
+        "username": "admin",
+        "password": "admin",
+        "usertype": "admin"
+    },
+```
+
+Run the flask web host and open the URL: `http://<camera ip>:<camera port>`
+
+```
+python webCamApp.py
+```
+
+To call the motion JPEG API with the GET request : 
+
+```
+response = requests.get(http://<camera ip>:<camera port>/cgi-bin/mjpg/<Access Token>, timeout=1)
+```
+
+
+
+#### Usage of Camera View Dashboard
+
+Rename the configuration file template `camDashboardConfig_template.txt` to ``camDashboardConfig.txt` and set the parameter as shown below:
+
+```
+# This is the config file template for the module <camDashboardRun.py>
+# Setup the parameter with below format (every line follows <key>:<value> format, the
+# key can not be changed):
+#-----------------------------------------------------------------------------
+# Test mode:
+# - True: run the UI with out connect to the cameras.
+# - False: connect to the cameras and fetch the vide stream.
+#TEST_MD:True
+TEST_MD:False
+#-----------------------------------------------------------------------------
+# Define all the HMI UI config parameters
+# define UI title name 
+UI_TITLE: Multi-Camera View Monitor Dashboard
+# Define update clock interval
+CLK_INT:0.5
+#-----------------------------------------------------------------------------
+# camera connection configuration file.
+CAM_CONFIG_FILE:cameraConfig.json
+```
+
+Copy the access token (Fixed/Temporary) from the related camera, Rename the configuration file template `cameraConfig_template.json` to `cameraConfig.txt` and add the camera want to access in the file as shown below:
+
+```
+    "Desktop1": {
+        "name": "Desktop screenshot 1 virtual Camera",
+        "url": "http://127.0.0.1:5000/cgi-bin/mjpg/",
+        "token": "motionJPEG",
+        "size": [
+            640,
+            480
+        ]
+    },    
+```
+
+Make sure all the virtual camera are running and run the dashboard : 
+
+```
+python camDashboardRun
+```
+
+#### Usage Case as Cyber Range Surveillance System
+
+The system is used in the [Aviation runway light management system  cyber range](https://www.linkedin.com/pulse/aviation-runway-lights-management-simulation-system-yuancheng-liu-5rzhc) to simulate a tower operator's camera monitor display to display four camera: 
+
+1. Runway landing area surveillance camera 
+2. Runway takeoff area surveillance camera 
+3. Tower operational room surveillance camera 
+4. Cyber range physical world simulator view
+
+![](doc/img/s_10.png)
+
+#### Usage Case as Cyber Exercise Main Projection Screen 
+
+The system is used in to monitor all the HMIs for the railway cyber range in cyber exercise  
+
+1. Railway cyber range physical world simulator
+2. Railway signaling system HMI
+3. Railway train monitor system HMI
+4. Railway management HMI
+
+
+
+------
+
+> Last edit by LiuYuancheng (liu_yuan_cheng@hotmail.com) at 03/11/2025, if you have any problem please free to message me.
