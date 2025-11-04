@@ -399,7 +399,7 @@ The system is used in to monitor all the HMIs for the railway cyber range in cyb
 3. Railway train monitor system HMI
 4. Railway management HMI
 
-
+![](doc/img/s_11.png)
 
 ------
 
