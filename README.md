@@ -60,117 +60,177 @@ We will also show a use case of how this project is used to simulate 4 different
 
 ------
 
-### System Design 
+### System Design
 
-In this section I will introduce the detailed design of the system.
+This section introduces the detailed design and internal structure of the three major components of the system introduced in the `Architecture Overview` section.
 
 #### Design of Virtual Camera Client Library
 
-The virtual camera module provides a parent `camClient` class with a five steps to transfer the videos stream to browser as shown below:
+The `Virtual Camera Client Library` is responsible for transforming various video sources into continuous MJPEG streams that can be served to browsers or other applications. The core of this module is the base class `camClient`, which defines the streaming pipeline consisting of five main steps:
 
 ```mermaid
 flowchart LR
-    A[Frame Capture From Source] --> B
-    B[JPEG Encoding] --> C
-    C[HTTP Streaming] --> D
-    D[Multipart MJPEG Response] --> E
-    E[Browser Renders Live Stream]
+    A[Frame Capture From Source] --> B[JPEG Encoding]
+    B --> C[HTTP Streaming]
+    C --> D[Multipart MJPEG Response]
+    D --> E[Browser Renders Live Stream]
 ```
 
-**Frame Capture From Source**
+**Step 1: Frame Capture from Source**
 
-All the children class will overwrite the interface function `getOneFrame()` to fetch the related `OpenCV-cv2` Image from the video source it connected.
+- Each subclass implements the interface function `getOneFrame()` to retrieve image frames from its assigned video source using OpenCV (`cv2`). This function ensures consistent frame objects across all source types.
 
-**JPEG Encoding**
 
-Each cv2 image frame is compressed with the JPEG encoding:
+**Step 2: Image JPEG Encoding**
+
+- Each captured frame is compressed into JPEG format to reduce bandwidth and enable efficient streaming:
+
 
 ```python
 _, buffer = cv2.imencode('.jpg', frame)
 ```
 
-**HTTP Streaming**
-The Flask generator `yields` each JPEG in the HTTP response:
+**Step 3: Return HTTP Streaming**
+
+- The Flask generator continuously yields each encoded JPEG frame to the HTTP response stream:
 
 ```python
 yield (b'--frame\r\n'
        b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 ```
 
-**Multipart MJPEG Response**
+**Step 4: Multipart MJPEG Response**
 
- Tells the browser to expect *multiple JPEG frames* in one continuous HTTP response:
+The HTTP response is sent using the MIME type `multipart/x-mixed-replace`, allowing browsers to interpret it as a continuous stream of JPEG images:
 
 ```html
 mimetype='multipart/x-mixed-replace; boundary=frame'
 ```
 
-**Browser Renders Live Stream**
+**Step 5: Browser Renders Live Stream**
 
-In the browser’s `<img>` element, ecodes each incoming JPEG frame in order and displays them — visually creating a video:
+- In the browser’s `<img>` element, ecodes each incoming JPEG frame in order and displays them — visually creating a video:
+
 
 ```
 <img src="{{ url_for('video_feed') }}" width="900" height="500">
 ```
 
-Each child class will inherit the `camClient` class and linked to the related video source as shown below:
+**Class Structure and Source Inheritance**
+
+The `camClient` base class is extended by several specialized subclasses that handle different input sources:
 
 ```mermaid
 flowchart LR
-    A[camClient] --> B
-    A[camClient] --> C
-    A[camClient] --> D
-    A[camClient] --> E
-    B[camClientReal] --> |Fetch Image| F[Laptop / USB Camera]
-    B[camClientReal] --> |Fetch Image|G[CCTV Camera / Video server use rtsp]
-    C[camClientSimu] --> |Fetch Image|H[Pre-saved Images data set folder]
-    D[camClientScreen] --> |Fetch Image|I[OS desktop reading]
-    E[camClientWinApp] --> |Fetch Image|J[Windows App UI Screenshot]
+    A[camClient] --> B[camClientReal]
+    A --> C[camClientSimu]
+    A --> D[camClientScreen]
+    A --> E[camClientWinApp]
+    B --> |Fetch Image:cameraIdx| F[Laptop / USB Camera]
+    B --> |Fetch Image:RTSP_url| G[RTSP/HTTP Video Stream]
+    C --> |Fetch Image:imageFolder+imageName| H[Pre-saved Image Dataset]
+    D --> |Fetch Image:desktopArea| I[Desktop / Screen Area]
+    E --> |Fetch Image:Application windowName| J[Windows Application Window]
 ```
+
+Each subclass manages its own capture logic while maintaining a unified streaming interface for the Flask server and dashboards.
 
 #### Design of Flask Camera Server
 
-The flask camera server provide the basic IOT camera web pages for the user to change the camera configuration, view the live view of the camera, link and map the current display frame with the cyber range physical world simulator scenario, provide the motion JPEG API for other program to fetch. The program work flow diagram is shown below:
+The `Flask Camera Server` is a web service providing user interfaces, video live view, configuration options, and API endpoints for video streaming. It also supports secure access control and linkage with physical-world simulation data in cyber range or digital twin environments. The Flask server’s operational flow / structure is shown below:
 
 ![](doc/img/s_04.png)
 
-The module function detail: 
+The four modules function detail includes:
 
-- **Video Source Manager Module** : The wrapper module import and use the related Virtual Camera Client Library to fetch the the image frame from the related video steam source. 
-- **User and Access Management Module** : The manager module linked with the credential data base to control the users login authorization and the Motion JPEG API call accessible .
-- **Data Manager Module** : The data manager module linked to cyber range physical world simulator to fetch the physical components state such as the train/plane position then mapping to the related frame from the video source then to shown in the web live view page. 
+- **Video Source Manager Module** : The wrapper module imports and Integrates with the `Virtual Camera Client Library` to manage frame capture from multiple video sources.
+- **User and Access Management Module** : Handles authentication and authorization, linked to a credential database to manage user logins and MJPEG fetching API access permissions.
+- **Data Manager Module** : The data manager module interfaces with the cyber range’s physical-world simulator to map operational states (e.g., aircraft position, train movement) to appropriate camera video display feed frames.
 - **Flash Web Service Module** : The main web service module open a configurable port to handle all the http/https requests.
 
-The current Flask web service module provide 4 pages for user to use:
+The Flask-based web server provides four main pages for users:
 
 **[1] IP Camera Home Page**
 
-When the user type in the camera simulator's IP address, they will assess the home page as shown below, the user needs to login with the valid username and password to access the other pages. 
+The default landing page when the user user access the camera simulator IP address, prompting user login with valid credentials before accessing the camera system:
 
 ![](doc/img/s_05.png)
 
 **[2] IP Camera Home Page**
 
-After the user login with the correct credentials, the user can see the navigation bars, when the user click the "Live View " to check the current camera live video stream as shown below image, then the user can also adjust the frame resolution and FPS from the live view page. 
+After the user login with the correct credentials, they can access the pages displays the current live MJPEG stream. Users can adjust frame resolution and FPS in real time:
 
 ![](doc/img/s_06.png)
 
 **[3] User Configuration Page** 
 
-The user can configure the use login credential in the user configuration page as shown in the below image.  There are 2 type of users: 
+Allows different types of user to manage and change the access credential. There are 2 type of users: 
 
-- the normal user type user can only view the camera live view, change their own password. the normal user can not check or change the motion-JPEG API call token. 
-- the admin type user can add and deleted other users, reset and check other user's password, and most important the admin user is able to access the motion-JPEG configuration page to create a new API call token. 
+- **Normal users** can only view the live stream and change their password.
+- **Admin users** can add/delete users, reset / check passwords, and manage API tokens.
 
 ![](doc/img/s_07.png)
 
 **[4] Access Token Configuration Page**
 
-For other program which use the motion-JPEG API to fetch the video stream, they need to submit a valid access token to get the the frame. Only the admin user can access the API token configuration page as shown in the below image. 
+Used for generating and managing MJPEG API access tokens for external applications. For other program which use the motion-JPEG API to fetch the frame,  a valid access token is required. Only the admin user can access the API token configuration page as shown below:
 
 ![](doc/img/s_08.png)
 
-There are 2 type of API access token: 
+There are 2 type of API access tokens: 
 
-- Fixed token: The fixed token is pre-configured in the camera local data base and there is no usage limitation. The Fixed token will not lose if we reboot the camera simulator program. 
-- Temporary token: the temporary token is saved in the camera's memory, every time when the admin press the button "Generate a random token", the camera simulator will generate a 16 characters temporary token. The admin can also set the valid period of the temporary token. All the temporary token will be lose when the camera simulator is rebooted. 
+- **Fixed Token** : The fixed token is pre-configured in the camera local data base and there is no usage limitation. The Fixed token will not lose if we reboot the camera simulator program. 
+- **Temporary Token** : The temporary tokens are saved in the camera's memory, every time when the admin press the button "Generate a random token", the camera simulator will generate a 16 characters temporary token. The admin can also set the valid period of the temporary token. All the temporary tokens will be lose when the camera simulator is rebooted. 
+
+The user access rule is shown in the below table: 
+
+| Function\User                                | Admin User | Normal User |
+| -------------------------------------------- | ---------- | ----------- |
+| Access the user management page              | ✅          | ❌           |
+| Change own password                          | ✅          | ✅           |
+| Change and check other user's password       | ✅          | ❌           |
+| Add and remove normal user                   | ✅          | ❌           |
+| Create new admin user                        | ✅          | ❌           |
+| Remove exist admin user                      | ❌          | ❌           |
+| Access the motion-JPEG token management page | ✅          | ❌           |
+| View the Fixed and temporary token           | ✅          | ❌           |
+| Generate and configure the temporary token   | ✅          | ❌           |
+
+#### Design of Multi-Camera View Monitor Dashboard
+
+The `Multi-Camera View Monitor Dashboard` aggregates multiple virtual camera streams into one unified monitoring interface. It fetches MJPEG video feeds through HTTP API calls and displays them in a configurable multi-view layout.
+
+The network configuration of the camera simulators and the dashboard is shown below:
+
+![](doc/img/s_09.png)
+
+The display dashboard feature includes:
+
+- Supports simultaneous monitoring of multiple MJPEG feeds.
+- Configurable grid layout (e.g., 2x2, 3x3) for custom display setups.
+- Adjustable stream FPS and resolution for performance tuning.
+- Allows multiple dashboards to subscribe to the same camera stream
+
+**Camera Configuration File**
+
+Each camera feed is defined in a JSON configuration file. Below is an example to add a new camera into the dashboard: 
+
+```json
+    "Desktop1": {
+        "name": "Desktop screenshot 1 virtual Camera",
+        "url": "http://127.0.0.1:5000/cgi-bin/mjpg/",
+        "token": "motionJPEG",
+        "size": [
+            640,
+            480
+        ]
+    },    
+```
+
+The dashboard supports flexible layout configuration, adjustable FPS, and can display multiple camera streams in a single window or across multiple displays.
+
+
+
+------
+
+### System Configuration and Usage
