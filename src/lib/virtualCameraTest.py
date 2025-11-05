@@ -38,7 +38,7 @@ elif testCase == 2:
     camObj = cam.camClientScreen()
 elif testCase == 3:
     windowName = "templates - File Explorer"
-    windowName = "2D Airport CAT-II Runway Light System Simulation"
+    #windowName = "2D Airport CAT-II Runway Light System Simulation"
     camObj = cam.camClientWinApp(windowName)
 else:
     exit()
