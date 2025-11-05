@@ -201,7 +201,7 @@ CAM_CONFIG_FILE:cameraConfig.json
 
  Rename the configuration file template `cameraConfig_template.json` to `cameraConfig.txt` , copy the access token (Fixed/Temporary) from the related camera's token page and add the camera you want to access in the file as shown below:
 
-```
+```json
     "Desktop1": {
         "name": "Desktop screenshot 1 virtual Camera",
         "url": "http://127.0.0.1:5000/cgi-bin/mjpg/",
@@ -221,7 +221,7 @@ Then change the image size parameter `[ width, height ]`
 
 Make sure all the virtual camera are running and run the dashboard with cmd: 
 
-```
+```bash
 python camDashboardRun
 ```
 
@@ -237,7 +237,7 @@ The un-configured or un-connected camera will show "no video".
 
 If capture the window shows below error, means the captured windows window is minimized:
 
-```
+```verilog
 Error on request:
 Traceback (most recent call last):
   File "C:\Users\liu_y\AppData\Local\Programs\Python\Python37-32\lib\site-packages\werkzeug\serving.py", line 323, in run_wsgi

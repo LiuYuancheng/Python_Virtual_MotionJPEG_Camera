@@ -4,8 +4,10 @@
 
 #-----------------------------------------------------------------------------
 # Test mode flag, 
-# - True: capture the camera image from data set 
-# - False: capture the camera image from real camera
+# CAM_MD:1 - From real camera 
+# CAM_MD:2 - From image data set
+# CAM_MD:3 - From desktop screen recording
+# CAM_MD:4 - From Windows application.
 CAM_MD:2
 
 #-----------------------------------------------------------------------------

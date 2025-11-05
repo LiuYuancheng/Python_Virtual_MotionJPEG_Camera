@@ -253,7 +253,7 @@ The dashboard supports flexible layout configuration, adjustable FPS, and can di
 
 ### System Configuration and Usage
 
-**For system usage and configuration, please refer to the [System Usage Manual Document](UsageManual)**
+**For system usage and configuration, please refer to the [System Usage Manual Document](UsageManual.md)**
 
 **Development Environment** : Python 3.7.4+
 
