@@ -107,7 +107,8 @@ yield (b'--frame\r\n'
 
 **Step 4: Multipart MJPEG Response**
 
-The HTTP response is sent using the MIME type `multipart/x-mixed-replace`, allowing browsers to interpret it as a continuous stream of JPEG images :
+- The HTTP response is sent using the MIME type `multipart/x-mixed-replace`, allowing browsers to interpret it as a continuous stream of JPEG images :
+
 
 ```html
 mimetype='multipart/x-mixed-replace; boundary=frame'
@@ -299,12 +300,12 @@ Multi-Camera View Monitor Dashboard
 The system is design for using in build the OT cyber ranges and supporting the cyber exercise, the possible use cases include:  
 
 - Provide instrumented camera endpoints for blue/red team exercises and cyber ranges.
-- Deploy believable camera honeypots to capture attacker behaviour and build datasets.
+- Deploy believable camera honeypots to capture attacker behavior and build datasets.
 - Integrate camera feeds into digital-twin scenarios (e.g., show state-dependent video based on simulated operations).
 - Test and validate surveillance clients, analytics pipelines, and dashboards without physical cameras.
 - Aggregate diverse video sources from virtual machines and host applications for demonstrations, QA, or ML dataset generation.
 
-We will also show two use cases of how this project is used to simulate 4 different cameras in the aviation runway cyber range and monitor the railway cyber range HMI(s) in cyber execise.
+We will also show two use cases of how this project is used to simulate 4 different cameras in the aviation runway cyber range and monitor the railway cyber range HMI(s) in cyber exercise.
 
 #### Usage Case as Cyber Range Surveillance System
 
