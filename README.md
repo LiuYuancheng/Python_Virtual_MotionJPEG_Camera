@@ -125,7 +125,7 @@ mimetype='multipart/x-mixed-replace; boundary=frame'
 <img src="{{ url_for('video_feed') }}" width="900" height="500">
 ```
 
-**Class Structure and Source Inheritance**
+**2.1.1 Class Structure and Source Inheritance**
 
 The `camClient` base class is extended by several specialized subclasses that handle different input sources:
 
@@ -163,7 +163,7 @@ The four modules function detail includes:
 
 The Flask-based web server provides four main pages for users as shown below : 
 
-**[1] Camera Home Page**
+**2.2.1 [1] Camera Home Page**
 
 The default landing page when the user access the camera simulator IP address, prompting user login with valid credentials before accessing the camera system : 
 
@@ -171,7 +171,7 @@ The default landing page when the user access the camera simulator IP address, p
 
 `Figure-05: IP Camera Home Page Screenshot, version v_0.0.3 (2025)`
 
-**[2] Camera Video Live View Page**
+**2.2.2 [2] Camera Video Live View Page**
 
 After the user login with the correct credentials, they can access the pages displays the current live MJPEG stream. Users can adjust frame resolution and FPS in real time from the page:
 
@@ -217,7 +217,7 @@ The user access rule and available function are shown in the below table:
 | View the fixed and temporary API token              | ✅          | ❌           |
 | Generate, modify and delete the temporary API token | ✅          | ❌           |
 
-#### Design of Multi-Camera View Monitor Dashboard
+#### 2.3 Design of Multi-Camera View Monitor Dashboard
 
 The `Multi-Camera View Monitor Dashboard` aggregates multiple virtual camera streams into one unified monitoring interface. It fetches MJPEG video feeds through HTTP API calls and displays them in a configurable multi-view layout. The network topology and configuration of the camera simulators and the dashboard is shown below:
 
@@ -254,13 +254,13 @@ The dashboard supports flexible layout configuration, adjustable FPS, and can di
 
 ------
 
-### System Configuration and Usage
+### 3. System Configuration and Usage
 
 **For system usage and configuration, please refer to the [System Usage Manual Document](UsageManual.md)**
 
-**Development Environment** : Python 3.7.4+
+**3.1.1 Development Environment** : Python 3.7.4+
 
-**Project file list and module function description**
+**3.1.2 Project file list and module function description**
 
 Virtual Camera Client Library
 
@@ -297,7 +297,7 @@ Multi-Camera View Monitor Dashboard
 
 ------
 
-### Program Typical Use Cases
+### 4. Program Typical Use Cases
 
 The system is design for using in build the OT cyber ranges and supporting the cyber exercise, the possible use cases include:  
 
@@ -309,7 +309,7 @@ The system is design for using in build the OT cyber ranges and supporting the c
 
 We will also show two use cases of how this project is used to simulate 4 different cameras in the aviation runway cyber range and monitor the railway cyber range HMI(s) in cyber exercise.
 
-#### Usage Case as Cyber Range Surveillance System
+#### 4.1 Usage Case as Cyber Range Surveillance System
 
 The system is used in the [Aviation runway light management system  cyber range](https://www.linkedin.com/pulse/aviation-runway-lights-management-simulation-system-yuancheng-liu-5rzhc) to simulate a tower operator's surveillance camera monitoring system to display four cameras shown below. The four cameras include : 
 
@@ -322,7 +322,7 @@ The system is used in the [Aviation runway light management system  cyber range]
 
 `Figure-10: Cyber Range Surveillance System Dashboard, version v_0.0.3 (2025)`
 
-#### Usage Case as Cyber Exercise Main Projection Screen 
+#### 4.2 Usage Case as Cyber Exercise Main Projection Screen 
 
 The system is used in to monitor all the UI program running on different VMs of the Land Based Railway IT-OT System Cyber Security Cyber Range System in the cyber exercise and project on the big TV as shown below. The 4 monitored program includes:
 
