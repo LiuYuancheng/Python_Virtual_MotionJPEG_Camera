@@ -23,16 +23,16 @@ The simulator intentionally mimics the web UI and behavior of [Axis IP cameras](
 [TOC]
 
 - [Python_Virtual_Motion-JPEG_Camera_Simulator](#python-virtual-motion-jpeg-camera-simulator)
-    + [Introduction](#introduction)
-      - [Architecture Overview](#architecture-overview)
-    + [System Design](#system-design)
-      - [Design of Virtual Camera Client Library](#design-of-virtual-camera-client-library)
-      - [Design of Flask Camera Server](#design-of-flask-camera-server)
-      - [Design of Multi-Camera View Monitor Dashboard](#design-of-multi-camera-view-monitor-dashboard)
-    + [System Configuration and Usage](#system-configuration-and-usage)
-    + [Program Typical Use Cases](#program-typical-use-cases)
-      - [Usage Case as Cyber Range Surveillance System](#usage-case-as-cyber-range-surveillance-system)
-      - [Usage Case as Cyber Exercise Main Projection Screen](#usage-case-as-cyber-exercise-main-projection-screen)
+    + [1. Introduction](#1-introduction)
+      - [1.1 Architecture Overview](#11-architecture-overview)
+    + [2. System Design](#2-system-design)
+      - [2.1 Design of Virtual Camera Client Library](#21-design-of-virtual-camera-client-library)
+      - [2.2 Design of Flask Camera Server](#22-design-of-flask-camera-server)
+      - [2.3 Design of Multi-Camera View Monitor Dashboard](#23-design-of-multi-camera-view-monitor-dashboard)
+    + [3. System Configuration and Usage](#3-system-configuration-and-usage)
+    + [4. Program Typical Use Cases](#4-program-typical-use-cases)
+      - [4.1 Usage Case as Cyber Range Surveillance System](#41-usage-case-as-cyber-range-surveillance-system)
+      - [4.2 Usage Case as Cyber Exercise Main Projection Screen](#42-usage-case-as-cyber-exercise-main-projection-screen)
 
 ------
 
@@ -163,7 +163,7 @@ The four modules function detail includes:
 
 The Flask-based web server provides four main pages for users as shown below : 
 
-**2.2.1 [1] Camera Home Page**
+**2.2.1 Camera Home Page**
 
 The default landing page when the user access the camera simulator IP address, prompting user login with valid credentials before accessing the camera system : 
 
@@ -171,7 +171,7 @@ The default landing page when the user access the camera simulator IP address, p
 
 `Figure-05: IP Camera Home Page Screenshot, version v_0.0.3 (2025)`
 
-**2.2.2 [2] Camera Video Live View Page**
+**2.2.2 Camera Video Live View Page**
 
 After the user login with the correct credentials, they can access the pages displays the current live MJPEG stream. Users can adjust frame resolution and FPS in real time from the page:
 
@@ -179,7 +179,7 @@ After the user login with the correct credentials, they can access the pages dis
 
 `Figure-06: Camera Video Live View Page Screenshot, version v_0.0.3 (2025)`
 
-**[3] User Configuration Page** 
+**2.2.3 User Configuration Page** 
 
 Allows different types of user to manage and change the access credential. The current version provides 2 type of users: 
 
@@ -190,7 +190,7 @@ Allows different types of user to manage and change the access credential. The c
 
 `Figure-07: User Configuration Page Screenshot, version v_0.0.3 (2025)`
 
-**[4] Access Token Configuration Page**
+**2.2.4 Access Token Configuration Page**
 
 Used for generating and managing MJPEG API access tokens for external applications. For other program which use the motion-JPEG API to fetch the frame,  a valid access token is required when calling the API url. Only the admin user can access the API token configuration page as shown below:
 
